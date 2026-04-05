@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vibecraft - 3D Renderer</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="dependencies/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+<div id="screen-profile" class="screen active" style="background: url('dirt.png') repeat; background-size: 64px; z-index: 50;">
+  <div class="screen-title" style="top: 50px;">Edit Profile</div>
+  <div class="profile-container" style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: -50px;">
+    <label style="color: #aaa; text-shadow: 2px 2px #000; font-size: 14px; text-align: left; width: 100%;">Username</label>
+    <input type="text" id="profile-username" class="mc-input" value="Player" style="width: 300px; margin-bottom: 30px;">
+    
+    <div class="mc-button" style="width: 200px;" onclick="saveProfile()">
+      <div class="title">Done</div>
+    </div>
+  </div>
+</div>
+
+  <div class="panorama-wrapper">
+    <div class="panorama-layer">
+      <img src="assets/title/1.png" alt="Panorama">
+      <img src="assets/title/2.png" alt="Panorama">
+      <img src="assets/title/3.png" alt="Panorama">
+    </div>
+    <div class="vignette-outward"></div> 
+  </div>
+
+  <div id="screen-main" class="screen">
+    <div class="main-menu-content">
+      <img src="assets/title/logo.png" alt="Minecraft" class="mc-logo-img">
+      <div class="mc-menu">
+        <div class="mc-button full" onclick="navigate('screen-singleplayer')"><div class="title">Singleplayer</div></div>
+        <div class="mc-button full"><div class="title">Multiplayer</div></div>
+        <div class="mc-button full"><div class="title">Minecraft Realms</div></div>
+        <div class="double">
+          <div class="mc-button full" onclick="navigate('screen-options')"><div class="title">Options</div></div>
+          <div class="mc-button full"><div class="title">Quit Game</div></div>
+        </div>
+        <div class="mc-button full lang"><div class="title"><img src="https://i.ibb.co/99187Lk/lang.png" alt="Lang"/></div></div>
+      </div>
+    </div>
+    <div id="main-version-text" class="version-text"></div>
+  </div>
+
+  <div id="screen-options" class="screen bg-dark-overlay">
+    <div class="screen-title">Options</div>
+    <div class="options-content">
+      <div class="mc-options-list">
+        <div class="double-layout">
+          <div class="mc-button full"><div class="title">FOV: Normal</div></div>
+          <div class="mc-button full"><div class="title">Online...</div></div>
+        </div>
+        <div class="double-layout" style="margin-top: 16px;">
+          <div class="mc-button full"><div class="title">Skin Customization...</div></div>
+          <div class="mc-button full"><div class="title">Music & Sounds...</div></div>
+        </div>
+        <div class="double-layout">
+          <div class="mc-button full" onclick="navigate('screen-video-settings')"><div class="title">Video Settings...</div></div>
+          <div class="mc-button full"><div class="title">Controls...</div></div>
+        </div>
+        <div class="double-layout">
+          <div class="mc-button full"><div class="title">Language...</div></div>
+          <div class="mc-button full"><div class="title">Chat Settings...</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-center-bar">
+      <div class="mc-button wide-btn" onclick="navigate('screen-main')"><div class="title">Done</div></div>
+    </div>
+  </div>
+
+  <div id="screen-video-settings" class="screen bg-dark-overlay">
+    <div class="screen-title">Video Settings</div>
+    <div class="options-content">
+      <div class="mc-options-list">
+        <div class="options-row">
+  <button class="mc-button">Graphics: Fancy</button>
+
+  <div class="mc-slider-wrapper">
+    <input type="range" id="render-distance-slider" min="1" max="8" value="4" 
+           oninput="updateRenderDistance(this.value)">
+    <div id="render-distance-label" class="mc-slider-text">Render Distance: 4 chunks</div>
+  </div>
+</div>
+        <div class="double-layout" style="margin-top: 16px;">
+          <div class="mc-button full"><div class="title">Smooth Lighting: Max</div></div>
+          <div class="mc-button full"><div class="title">Max Framerate: Unlimited</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-center-bar">
+      <div class="mc-button wide-btn" onclick="navigate('screen-options')"><div class="title">Done</div></div>
+    </div>
+  </div>
+
+  <div id="screen-singleplayer" class="screen bg-dark-overlay">
+    <div class="screen-title">Select World</div>
+    
+    <input type="text" id="world-search-input" class="mc-input" placeholder="Search worlds..." autocomplete="off" spellcheck="false" style="margin-top: 60px; margin-bottom: 10px; width: 500px;" oninput="filterWorlds()">
+    
+    <div class="world-list-container" style="margin-top: 0;">
+      <ul id="world-list-ul"></ul>
+    </div>
+    
+    <div class="bottom-center-bar" style="flex-direction: column; align-items: center; bottom: 15px;">
+      <div class="double-layout">
+        <div class="mc-button full" onclick="startGame()"><div class="title">Play Selected World</div></div>
+        <div class="mc-button full" onclick="navigate('screen-create-world')"><div class="title">Create New World</div></div>
+      </div>
+      <div class="double-layout" style="margin-top: 8px;">
+        <div class="mc-button full" onclick="deleteSelectedWorld()"><div class="title">Delete</div></div>
+        <div class="mc-button full" onclick="navigate('screen-main')"><div class="title">Cancel</div></div>
+      </div>
+    </div>
+  </div>
+
+ <div id="screen-create-world" class="screen">
+  <div class="bg-dark-overlay" style="position:absolute; width:100%; height:100%; z-index:-1; background:rgba(0,0,0,0.6);"></div>
+  <div class="screen-title" style="top: 30px;">Create New World</div>
+  
+  <div class="options-container" style="width: 400px; display: flex; flex-direction: column; gap: 10px; margin-top: 50px; z-index: 10;">
+    <label style="color:#aaa; text-shadow:2px 2px #000; margin-bottom:-5px;">World Name</label>
+    <input type="text" id="world-name-input" class="mc-input" value="New World" style="width: 100%;">
+    
+    <label style="color:#aaa; text-shadow:2px 2px #000; margin-bottom:-5px; margin-top: 5px;">Seed for the World Generator</label>
+    <input type="text" id="world-seed-input" class="mc-input" placeholder="Leave blank for random" style="width: 100%; margin-bottom: 5px;">
+
+    <div class="mc-button full" onclick="toggleGameMode()"><div class="title" id="create-gamemode-btn">Game Mode: Survival</div></div>
+    <div class="mc-button full" onclick="toggleWorldType()"><div class="title" id="create-type-btn">World Type: Normal</div></div>
+    <div class="mc-button full" onclick="toggleCheats()"><div class="title" id="create-cheats-btn">Allow Cheats: OFF</div></div>
+    <div class="mc-button full" onclick="toggleWorldSize()"><div class="title" id="create-size-btn">World Size: 16x16 (Default)</div></div>
+    
+    <div class="double-layout" style="margin-top: 15px;">
+      <div class="mc-button full" onclick="createNewWorld()"><div class="title">Create New World</div></div>
+      <div class="mc-button full" onclick="navigate('screen-singleplayer')"><div class="title">Cancel</div></div>
+    </div>
+  </div>
+</div>
+
+ <div id="screen-game" class="screen">
+  <canvas id="game-canvas"></canvas>
+  <div id="crosshair" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255,255,255,0.8); font-size: 24px; text-shadow: 1px 1px #000; pointer-events: none; z-index: 10;">+</div>
+  
+  <div id="hud-container">
+    <div id="hud-stats">
+      <div id="hud-hearts"></div>
+      <div id="hud-hunger"></div>
+    </div>
+    <div id="hud-hotbar"></div>
+  </div>
+  
+  <div id="hud-version-display" style="position: absolute; top: 10px; left: 10px; color: white; text-shadow: 1px 1px #000; font-family: 'MyCustomFont';"></div>
+  <div id="fps-counter" style="position: absolute; top: 30px; left: 10px; color: white; text-shadow: 1px 1px #000; font-family: 'MyCustomFont';"></div>
+  <div id="hud-coordinates" style="position: absolute; top: 50px; left: 10px; color: white; text-shadow: 1px 1px #000; font-family: 'MyCustomFont';"></div>
+
+<div id="chat-container">
+    <div id="chat-messages">
+      </div>
+    <input type="text" id="chat-input" class="mc-input" placeholder="> " autocomplete="off" maxlength="100">
+  </div>
+</div>
+
+  <div id="screen-pause" class="screen bg-dark-overlay">
+    <div class="screen-title">Game Menu</div>
+    <div class="mc-options-list" style="margin-top: 80px;">
+      <div class="mc-button wide-btn" onclick="resumeGame()"><div class="title">Back to Game</div></div>
+      <div class="double-layout" style="margin-top: 16px;">
+        <div class="mc-button full"><div class="title">Advancements</div></div>
+        <div class="mc-button full"><div class="title">Statistics</div></div>
+      </div>
+      <div class="double-layout">
+        <div class="mc-button full"><div class="title">Send Feedback</div></div>
+        <div class="mc-button full"><div class="title">Report Bugs</div></div>
+      </div>
+      <div class="double-layout">
+        <div class="mc-button full" onclick="navigate('screen-options')"><div class="title">Options</div></div>
+        <div class="mc-button full"><div class="title">Open to LAN</div></div>
+      </div>
+      <div class="mc-button wide-btn" style="margin-top: 16px;" onclick="saveAndQuit()"><div class="title">Save and Quit to Title</div></div>
+    </div>
+  </div>
+
+  <script src="./script.js"></script>
+
+<div id="screen-inventory" class="screen">
+  <div class="bg-dark-overlay" style="position:absolute; width:100%; height:100%; z-index:-1;"></div>
+  
+  <div class="inventory-gui">
+    <div class="inventory-top">
+      <div class="character-preview" style="width: 80px; height: 100px; background: #000; margin-right: 20px;"></div>
+      <div class="crafting-area">
+        <span style="font-size: 10px; color: #333; position: absolute; top: -15px;">Crafting</span>
+        <div class="crafting-grid" id="ui-craft-grid">
+          </div>
+        <div class="crafting-arrow">➔</div>
+        <div class="inv-slot crafting-result" id="ui-craft-result" onclick="handleInventoryClick('result', 0)"></div>
+      </div>
+    </div>
+    
+    <div class="inventory-main" id="ui-inv-main">
+      </div>
+    
+    <div class="inventory-hotbar" id="ui-inv-hotbar">
+      </div>
+  </div>
+
+  <div id="cursor-item" style="display:none; position:absolute; pointer-events:none; z-index:100;"></div>
+</div>
+
+<div id="modal-delete-world" class="modal-overlay" style="display: none;">
+  <div class="bedrock-modal">
+    <div class="bedrock-modal-title">Delete world permanently?</div>
+    <div class="bedrock-modal-content">
+      Are you sure you want to delete "<span id="delete-world-name"></span>"?<br><br>This world will be lost forever! (A long time!)
+    </div>
+    <div class="bedrock-modal-btn green-btn" onclick="confirmDeleteWorld()">Delete</div>
+    <div class="bedrock-modal-btn" onclick="cancelDeleteWorld()">Cancel</div>
+  </div>
+</div>
+</body>
+</html>
