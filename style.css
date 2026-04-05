@@ -1,0 +1,200 @@
+/* --- CUSTOM LOCAL FONT --- */
+@font-face {
+  font-family: 'Mojangles';
+  src: url('assets/fonts/mojangles.ttf') format('truetype'); /* Place your .ttf file in the same folder and rename this! */
+  font-weight: normal;
+  font-style: normal;
+}
+
+*, ::before, ::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font: 12pt "Mojangles", sans-serif;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #000;
+  position: relative;
+  overflow: hidden; /* prevents scrollbars on main menu */
+}
+
+/* --- BACKGROUNDS & LAYERS --- */
+.panorama-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300vw;
+  height: 100%;
+  display: flex;
+  z-index: 1;
+  animation: panRotate 45s linear infinite alternate;
+}
+.panorama-layer img {
+  width: 100vw;
+  height: 100%;
+  object-fit: cover;
+}
+@keyframes panRotate {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-200vw); }
+}
+
+.bg-dirt {
+  background-color: #404040;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="32" height="32" fill="%23454545"/><rect x="32" width="32" height="32" fill="%233a3a3a"/><rect y="32" width="32" height="32" fill="%23505050"/><rect x="32" y="32" width="32" height="32" fill="%23424242"/></svg>');
+  background-size: 64px 64px;
+  image-rendering: pixelated;
+}
+
+/* --- SCREEN MANAGEMENT --- */
+.screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.screen.active {
+  display: flex;
+}
+
+.main-menu-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.mc-logo-img {
+  width: 400px;
+  max-width: 90vw;
+  height: auto;
+  image-rendering: pixelated;
+  margin-bottom: 40px;
+}
+
+/* --- MAIN MENU (YOUR ORIGINAL CSS) --- */
+.mc-menu {
+  --btn-size: 30pt;
+  display: grid;
+  grid-template-columns: var(--btn-size) calc(var(--btn-size) * 10) var(--btn-size);
+  grid-template-rows: repeat(3, var(--btn-size)) 16px var(--btn-size);
+  grid-template-areas: ". first ." ". second ." ". third ." ". . ." "lang fourth .";
+  grid-gap: 8px;
+}
+.mc-menu .mc-button:nth-child(1) { grid-area: first; }
+.mc-menu .mc-button:nth-child(2) { grid-area: second; }
+.mc-menu .mc-button:nth-child(3) { grid-area: third; }
+.mc-menu .double { grid-area: fourth; }
+.mc-menu .double .mc-button:nth-child(1) { grid-area: left; }
+.mc-menu .double .mc-button:nth-child(2) { grid-area: right; }
+.mc-menu .mc-button:nth-child(5) { grid-area: lang; }
+
+.mc-menu .double {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "left right";
+  grid-gap: 8px;
+}
+
+/* --- SUB-MENU LAYOUTS (NEW ISOLATED CLASSES) --- */
+.screen-title {
+  color: #fff;
+  font-size: 16px;
+  text-shadow: 2px 2px 0px #3f3f3f;
+  position: absolute;
+  top: 30px;
+}
+.options-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: calc(100% - 140px);
+  overflow-y: auto;
+  margin-top: 60px;
+  margin-bottom: 80px;
+}
+.bottom-center-bar {
+  position: absolute;
+  bottom: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.mc-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+.double-layout {
+  width: calc(30pt * 10);
+  height: 30pt;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 8px;
+}
+
+/* --- BUTTON STYLES (YOUR ORIGINAL CSS) --- */
+.mc-button {
+  height: var(--btn-size, 30pt); /* Added fallback to prevent squishing */
+  width: calc(var(--btn-size, 30pt) * 10);
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  user-select: none;
+  background: #999 url("https://i.ibb.co/rb2TWXL/bgbtn.png") center/cover;
+  image-rendering: pixelated;
+  border: 2px solid #000;
+}
+.mc-button:hover .title {
+  background-color: rgba(100, 100, 255, 0.45);
+  text-shadow: 2px 2px #202013CC;
+  color: #FFFFA0;
+}
+.mc-button:active .title {
+  box-shadow: inset -2px -4px #0004, inset 2px 2px #FFF5;
+}
+.mc-button .title {
+  width: 100%;
+  height: 100%;
+  padding-bottom: 0.3em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #DDD;
+  text-shadow: 2px 2px #000A;
+  box-shadow: inset -2px -4px #0006, inset 2px 2px #FFF7;
+}
+.mc-button.full {
+  width: 100%;
+  height: 100%;
+}
+.mc-button.lang img {
+  width: 26px;
+  height: 26px;
+}
+.mc-button.lang .title {
+  padding-bottom: 0;
+}

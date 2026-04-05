@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Minecraft Style Menu &amp; Buttons</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <div id="screen-main" class="screen active">
+    
+    <div class="panorama-layer">
+      <img src="assets/title/1.png" alt="Panorama 1">
+      <img src="assets/title/2.png" alt="Panorama 2">
+      <img src="assets/title/3.png" alt="Panorama 3">
+    </div>
+
+    <div class="main-menu-content">
+      <img src="assets/title/minecraft-logo.png" alt="Minecraft" class="mc-logo-img">
+
+      <div class="mc-menu">
+        <div class="mc-button full" onclick="navigate('screen-create-world')">
+          <div class="title">Singleplayer</div>
+        </div>
+        <div class="mc-button full">
+          <div class="title">Multiplayer</div>
+        </div>
+        <div class="mc-button full">
+          <div class="title">Minecraft Realms</div>
+        </div>
+        <div class="double">
+          <div class="mc-button full" onclick="navigate('screen-options')">
+            <div class="title">Options...</div>
+          </div>
+          <div class="mc-button full">
+            <div class="title">Quit Game</div>
+          </div>
+        </div>
+        <div class="mc-button full lang">
+          <div class="title"><img src="https://i.ibb.co/99187Lk/lang.png" alt=" Lang"/></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-options" class="screen bg-dirt">
+    <div class="screen-title">Options</div>
+    
+    <div class="options-content">
+      <div class="mc-options-list">
+        <div class="double-layout">
+          <div class="mc-button full"><div class="title">FOV: Normal</div></div>
+          <div class="mc-button full"><div class="title">Online...</div></div>
+        </div>
+        <div class="double-layout" style="margin-top: 16px;">
+          <div class="mc-button full"><div class="title">Skin Customization...</div></div>
+          <div class="mc-button full"><div class="title">Music & Sounds...</div></div>
+        </div>
+        <div class="double-layout">
+          <div class="mc-button full"><div class="title">Video Settings...</div></div>
+          <div class="mc-button full"><div class="title">Controls...</div></div>
+        </div>
+        <div class="double-layout">
+          <div class="mc-button full"><div class="title">Language...</div></div>
+          <div class="mc-button full"><div class="title">Chat Settings...</div></div>
+        </div>
+        <div class="double-layout">
+          <div class="mc-button full"><div class="title">Resource Packs...</div></div>
+          <div class="mc-button full"><div class="title">Accessibility Settings...</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-center-bar">
+      <div class="mc-button" style="width: 400px;" onclick="navigate('screen-main')">
+        <div class="title">Done</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-create-world" class="screen bg-dirt">
+    <div class="screen-title">Create New World</div>
+    
+    <div class="bottom-center-bar">
+      <div class="mc-options-list">
+        <div class="double-layout">
+          <div class="mc-button full"><div class="title">Create New World</div></div>
+          <div class="mc-button full" onclick="navigate('screen-main')"><div class="title">Cancel</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
