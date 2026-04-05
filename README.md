@@ -42,6 +42,8 @@ World menu + deleting world screen (it took inspo off of the bedrock world delet
 
 <img width="3072" height="1728" alt="worldcreation0_3_0" src="https://github.com/user-attachments/assets/39d718ce-c41b-48bb-b5a7-bbf23f126ec7" />
 
+
+
 World creation menu (buttons are not centered correctly)
 
 <img width="3072" height="1728" alt="pausemenu0_3_0" src="https://github.com/user-attachments/assets/8fce4341-7291-4184-9029-60fd1f0b04be" />
